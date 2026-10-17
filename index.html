@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Prince Connect</title>
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { background-color: #08060f; color: #fff; font-family: system-ui, -apple-system, sans-serif; }
+    .neon-border { border: 1px solid rgba(168, 85, 247, 0.35); box-shadow: 0 0 15px rgba(168, 85, 247, 0.2); }
+    .glass-card { background: rgba(23, 17, 39, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .neon-btn { background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%); }
+    .story-ring { background: linear-gradient(45deg, #ec4899, #8b5cf6, #3b82f6); padding: 2.5px; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden select-none">
+
+  <!-- TOP HEADER -->
+  <header class="flex justify-between items-center px-4 py-3 border-b border-purple-900/30 bg-[#0c0918]/90 backdrop-blur z-20">
+    <div class="flex items-center space-x-2">
+      <span class="text-2xl font-black bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
+        PRINCE CONNECT
+      </span>
+    </div>
+    <div class="flex items-center space-x-4">
+      <button onclick="openModal('create-modal')" class="p-2 rounded-full glass-card text-purple-300 hover:text-white">
+        <i data-lucide="plus-circle" class="w-6 h-6"></i>
+      </button>
+      <button onclick="openModal('auth-modal')" id="auth-status-btn" class="p-2 rounded-full glass-card text-purple-300 hover:text-white">
+        <i data-lucide="user" class="w-6 h-6"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN SCROLLABLE CONTENT -->
+  <main class="flex-1 overflow-y-auto hide-scrollbar pb-24">
+    
+    <!-- 1. FEED SCREEN -->
+    <div id="screen-feed" class="block space-y-4">
+      <!-- Stories Reel -->
+      <div class="px-4 pt-3">
+        <div class="flex space-x-4 overflow-x-auto hide-scrollbar pb-2">
+          <div class="flex flex-col items-center space-y-1 flex-shrink-0 cursor-pointer">
+            <div class="story-ring rounded-full">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="w-14 h-14 rounded-full object-cover border-2 border-black" />
+            </div>
+            <span class="text-xs text-gray-300">You</span>
+          </div>
+          <div class="flex flex-col items-center space-y-1 flex-shrink-0 cursor-pointer">
+            <div class="story-ring rounded-full">
+              <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150" class="w-14 h-14 rounded-full object-cover border-2 border-black" />
+            </div>
+            <span class="text-xs text-gray-300">Sara</span>
+          </div>
+          <div class="flex flex-col items-center space-y-1 flex-shrink-0 cursor-pointer">
+            <div class="story-ring rounded-full">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" class="w-14 h-14 rounded-full object-cover border-2 border-black" />
+            </div>
+            <span class="text-xs text-gray-300">Anthony</span>
+          </div>
+          <div class="flex flex-col items-center space-y-1 flex-shrink-0 cursor-pointer">
+            <div class="story-ring rounded-full">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" class="w-14 h-14 rounded-full object-cover border-2 border-black" />
+            </div>
+            <span class="text-xs text-gray-300">Chika</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Posts List -->
+      <div id="posts-container" class="space-y-4 px-3">
+        <!-- Default Demo Post -->
+        <div class="glass-card rounded-2xl overflow-hidden neon-border">
+          <div class="flex items-center justify-between p-3">
+            <div class="flex items-center space-x-3">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="w-10 h-10 rounded-full object-cover" />
+              <div>
+                <h4 class="text-sm font-semibold text-white">Esther Howard</h4>
+                <p class="text-xs text-purple-400">UI/UX Designer</p>
+              </div>
+            </div>
+            <i data-lucide="more-horizontal" class="text-gray-400 w-5 h-5"></i>
+          </div>
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800" class="w-full h-72 object-cover" />
+          <div class="p-4 space-y-2">
+            <div class="flex justify-between items-center text-gray-300">
+              <div class="flex space-x-4">
+                <button class="flex items-center space-x-1 text-pink-500"><i data-lucide="heart" class="w-6 h-6 fill-current"></i> <span class="text-sm">2.4k</span></button>
+                <button class="flex items-center space-x-1"><i data-lucide="message-circle" class="w-6 h-6"></i> <span class="text-sm">184</span></button>
+                <button><i data-lucide="send" class="w-6 h-6"></i></button>
+              </div>
+              <button><i data-lucide="bookmark" class="w-6 h-6"></i></button>
+            </div>
+            <p class="text-sm text-gray-200"><span class="font-bold text-purple-300">Esther Howard</span> Creative vibes in the neon studio today! 🎧✨</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. CHAT SCREEN -->
+    <div id="screen-chat" class="hidden p-4 space-y-3">
+      <h3 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">Direct Messages</h3>
+      <div id="chat-messages-box" class="glass-card rounded-2xl p-4 h-96 overflow-y-auto space-y-3">
+        <!-- Message bubble demo -->
+        <div class="flex flex-col items-start">
+          <div class="bg-gray-800 text-white rounded-2xl rounded-tl-none px-4 py-2 text-sm max-w-[80%] border border-gray-700">
+            Hey! Welcome to Prince Connect 🚀
+          </div>
+          <span class="text-[10px] text-gray-500 mt-1">Admin</span>
+        </div>
+      </div>
+      <!-- Chat Input -->
+      <div class="flex items-center space-x-2 pt-2">
+        <input id="chat-input" type="text" placeholder="Type a message..." class="flex-1 bg-purple-950/40 border border-purple-500/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-400" />
+        <button onclick="sendMessage()" class="neon-btn p-3 rounded-xl text-white shadow-lg"><i data-lucide="send" class="w-5 h-5"></i></button>
+      </div>
+    </div>
+
+    <!-- 3. PROFILE SCREEN -->
+    <div id="screen-profile" class="hidden p-4 space-y-4 text-center">
+      <div class="flex flex-col items-center">
+        <div class="story-ring rounded-full p-1 mb-2">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" class="w-24 h-24 rounded-full object-cover border-4 border-black" />
+        </div>
+        <h2 id="profile-name" class="text-lg font-bold text-white">Floyd Miles</h2>
+        <p class="text-xs text-purple-400">@floyd_miles • Graphic Designer</p>
+        <p class="text-xs text-gray-400 mt-2 max-w-xs">Passion for creating impactful dark & neon user experiences 🚀</p>
+      </div>
+      <div class="flex justify-around glass-card rounded-2xl p-4">
+        <div><h4 class="font-bold text-lg text-white">128</h4><p class="text-xs text-gray-400">Posts</p></div>
+        <div><h4 class="font-bold text-lg text-purple-400">20.4K</h4><p class="text-xs text-gray-400">Followers</p></div>
+        <div><h4 class="font-bold text-lg text-blue-400">490</h4><p class="text-xs text-gray-400">Following</p></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- BOTTOM NAVIGATION BAR -->
+  <nav class="fixed bottom-0 left-0 right-0 glass-card border-t border-purple-900/30 py-3 px-6 flex justify-between items-center z-30">
+    <button onclick="switchTab('feed')" class="flex flex-col items-center text-purple-400"><i data-lucide="home" class="w-6 h-6"></i></button>
+    <button onclick="switchTab('chat')" class="flex flex-col items-center text-gray-400 hover:text-purple-400"><i data-lucide="message-square" class="w-6 h-6"></i></button>
+    <button onclick="openModal('create-modal')" class="neon-btn -mt-6 p-3 rounded-full text-white shadow-lg"><i data-lucide="plus" class="w-6 h-6"></i></button>
+    <button onclick="switchTab('feed')" class="flex flex-col items-center text-gray-400 hover:text-purple-400"><i data-lucide="compass" class="w-6 h-6"></i></button>
+    <button onclick="switchTab('profile')" class="flex flex-col items-center text-gray-400 hover:text-purple-400"><i data-lucide="user" class="w-6 h-6"></i></button>
+  </nav>
+
+  <!-- MODAL: CREATE POST -->
+  <div id="create-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-50">
+    <div class="glass-card p-6 rounded-2xl w-full max-w-sm space-y-4 neon-border">
+      <h3 class="text-lg font-bold text-purple-300">Create New Post</h3>
+      <textarea id="post-caption" placeholder="What's on your mind?..." class="w-full bg-black/50 border border-purple-500/30 rounded-xl p-3 text-sm text-white focus:outline-none"></textarea>
+      <input id="post-image" type="text" placeholder="Image URL (optional)..." class="w-full bg-black/50 border border-purple-500/30 rounded-xl p-3 text-sm text-white focus:outline-none" />
+      <div class="flex space-x-2">
+        <button onclick="closeModal('create-modal')" class="flex-1 py-2 glass-card rounded-xl text-gray-400">Cancel</button>
+        <button onclick="submitPost()" class="flex-1 py-2 neon-btn rounded-xl text-white font-semibold">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: AUTH -->
+  <div id="auth-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-50">
+    <div class="glass-card p-6 rounded-2xl w-full max-w-sm space-y-4 neon-border text-center">
+      <h3 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">Join Prince Connect</h3>
+      <input id="auth-email" type="email" placeholder="Email" class="w-full bg-black/50 border border-purple-500/30 rounded-xl p-3 text-sm text-white focus:outline-none" />
+      <input id="auth-pass" type="password" placeholder="Password" class="w-full bg-black/50 border border-purple-500/30 rounded-xl p-3 text-sm text-white focus:outline-none" />
+      <button onclick="handleAuth('login')" class="w-full py-2.5 neon-btn rounded-xl text-white font-semibold">Login</button>
+      <button onclick="handleAuth('signup')" class="w-full py-2 glass-card rounded-xl text-purple-300 text-sm">Create New Account</button>
+      <button onclick="closeModal('auth-modal')" class="text-xs text-gray-500 mt-2 block w-full">Close</button>
+    </div>
+  </div>
+
+  <!-- SCRIPT LOGIC (SUPABASE CONNECTED) -->
+  <script>
+    lucide.createIcons();
+    const SUPABASE_URL = "https://cgtllltgdamdgbpzguwh.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_tn0mh5VK3YTAsbWy1-ISmA_Lv16kIEt";
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function switchTab(tab) {
+      document.getElementById('screen-feed').classList.add('hidden');
+      document.getElementById('screen-chat').classList.add('hidden');
+      document.getElementById('screen-profile').classList.add('hidden');
+      document.getElementById('screen-' + tab).classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
+
+    async function handleAuth(type) {
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-pass').value;
+      if (!email || !password) return alert('Enter email and password');
+      if (type === 'signup') {
+        const { error } = await db.auth.signUp({ email, password });
+        if (error) alert(error.message); else alert('Account created! Please login.');
+      } else {
+        const { data, error } = await db.auth.signInWithPassword({ email, password });
+        if (error) alert(error.message);
+        else {
+          alert('Logged in as ' + data.user.email);
+          closeModal('auth-modal');
+        }
+      }
+    }
+
+    async function submitPost() {
+      const content = document.getElementById('post-caption').value;
+      const image_url = document.getElementById('post-image').value || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800";
+      const { data: { user } } = await db.auth.getUser();
+      if (!user) { alert('Please login first to create posts!'); openModal('auth-modal'); return; }
+      const { error } = await db.posts.insert([{ user_id: user.id, content, image_url }]);
+      if (error) alert(error.message);
+      else {
+        alert('Post published!');
+        closeModal('create-modal');
+        loadPosts();
+      }
+    }
+
+    async function loadPosts() {
+      const { data, error } = await db.from('posts').select('*, profiles(username, avatar_url)').order('created_at', { ascending: false });
+      if (data && data.length > 0) {
+        const container = document.getElementById('posts-container');
+        container.innerHTML = data.map(post => `
+          <div class="glass-card rounded-2xl overflow-hidden neon-border">
+            <div class="flex items-center space-x-3 p-3">
+              <img src="${post.profiles?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'}" class="w-10 h-10 rounded-full object-cover" />
+              <div><h4 class="text-sm font-semibold">${post.profiles?.username || 'User'}</h4><p class="text-xs text-purple-400">Creator</p></div>
+            </div>
+            ${post.image_url ? `<img src="${post.image_url}" class="w-full h-72 object-cover" />` : ''}
+            <div class="p-4"><p class="text-sm text-gray-200">${post.content || ''}</p></div>
+          </div>
+        `).join('');
+        lucide.createIcons();
+      }
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+      const box = document.getElementById('chat-messages-box');
+      box.innerHTML += `
+        <div class="flex flex-col items-end">
+          <div class="neon-btn text-white rounded-2xl rounded-tr-none px-4 py-2 text-sm max-w-[80%]">${text}</div>
+          <span class="text-[10px] text-gray-400 mt-1">Just now</span>
+        </div>`;
+      input.value = '';
+      box.scrollTop = box.scrollHeight;
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>
